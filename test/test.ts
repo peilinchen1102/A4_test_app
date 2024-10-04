@@ -62,6 +62,18 @@ describe("Create a user and log in", () => {
     await assert.rejects(app.getUser(""), "Username should be at least 1 character long");
     await app.getUser("alice");
   });
+
+  it("get added item should succeed", async () => {
+    const session = getEmptySession();
+
+    const created = await app.createUser(session, "barish", "1234");
+    assert(created.user);
+    await assert.rejects(app.logIn(session, "barish", "123"));
+    await app.logIn(session, "barish", "1234");
+
+    const item = await app.createItem(session, "apple", 10);
+    await app.getItem(session, "apple");
+  });
 });
 
 /*

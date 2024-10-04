@@ -2,9 +2,10 @@ import { ObjectId } from "mongodb";
 
 import { Router, getExpressRouter } from "./framework/router";
 
-import { Authing, Friending, Posting, Sessioning } from "./app";
+import { Authing, Friending, Posting, Sessioning, Tracking } from "./app";
 import { PostOptions } from "./concepts/posting";
 import { SessionDoc } from "./concepts/sessioning";
+
 import Responses from "./responses";
 
 import { z } from "zod";
@@ -151,6 +152,19 @@ class Routes {
     const user = Sessioning.getUser(session);
     const fromOid = (await Authing.getUserByUsername(from))._id;
     return await Friending.rejectRequest(fromOid, user);
+  }
+
+  @Router.post("/items")
+  async createItem(session: SessionDoc, item: string, count: number) {
+    const user = Sessioning.getUser(session);
+    const created = await Tracking.create(item, count);
+    return { msg: created.msg };
+  }
+
+  @Router.get("/items/:name")
+  async getItem(session: SessionDoc, item: string) {
+    const user = Sessioning.getUser(session);
+    return await Tracking.getItem(item);
   }
 }
 

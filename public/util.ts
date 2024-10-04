@@ -80,6 +80,13 @@ const operations: Operation[] = [
     method: "DELETE",
     fields: { id: "input" },
   },
+
+  {
+    name: "Add Item",
+    endpoint: "/api/items",
+    method: "POST",
+    fields: { item: "input", count: "input" },
+  },
   //
   // ...
   //
